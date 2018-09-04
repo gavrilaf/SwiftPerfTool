@@ -3,12 +3,12 @@ import Foundation
 // MARK: -
 public struct SFTMetrics: Equatable {
     
-    struct Time: Equatable {
-        let mean: Double
-        let sd: Double
-        let scores: Double
+    public struct Time: Equatable {
+        public let mean: Double
+        public let sd: Double
+        public let scores: Double
         
-        init(mean: Double, sd: Double, scores: Double) {
+        public init(mean: Double, sd: Double, scores: Double) {
             self.mean = mean
             self.sd = sd
             self.scores = scores
@@ -31,10 +31,10 @@ public struct SFTMetrics: Equatable {
         }
     }
     
-    let time: Time
-    let memoryUsage: UInt64
+    public let time: Time
+    public let memoryUsage: UInt64?
     
-    public init(latencies: Array<UInt64>, memoryUsage: UInt64) {
+    public init(latencies: Array<UInt64>, memoryUsage: UInt64?) {
         self.time = Time(from: latencies)
         self.memoryUsage = memoryUsage
     }
@@ -52,6 +52,19 @@ public struct SFTMetrics: Equatable {
     }
     
     public var memory: UInt64 {
-        return memoryUsage / 1024
+        return (memoryUsage ?? 0) / 1024
     }
+}
+
+extension SFTMetrics: CustomStringConvertible {
+    public var description: String {
+        return "Time scores: \(timeScores), mean: \(timeMean), sd: \(timeSd). Memory usage: \(memoryUsage != nil ? String(memory) : "not defined")"
+    }
+}
+
+// MARK :-
+func calcMemoryUsage(before: UInt64?, after: UInt64?) -> UInt64? {
+    guard let before = before, let after = after else { return nil }
+    let r = after.subtractingReportingOverflow(before)
+    return r.overflow ? 0 : r.partialValue
 }
