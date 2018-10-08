@@ -4,7 +4,7 @@ import SwiftPerfTool
 final class LatencyMeasureTests: XCTestCase {
     
     func testLatencySingleRun() {
-        let cfg = SFTConfig(iterations: 1, trials: [ { Thread.sleep(forTimeInterval: 0.1) } ])
+        let cfg = SPTConfig(iterations: 1, trials: [ { Thread.sleep(forTimeInterval: 0.1) } ])
         let metrics = runMeasure(with: cfg)
         
         XCTAssertTrue(metrics.timeMean.isApproximateEqual(to: 0.1, epsilon: 0.01))
@@ -13,7 +13,7 @@ final class LatencyMeasureTests: XCTestCase {
     }
     
     func testLatencyMultipleRun() {
-        let cfg = SFTConfig(iterations: 3, trials: [ { Thread.sleep(forTimeInterval: 0.1) } ])
+        let cfg = SPTConfig(iterations: 3, trials: [ { Thread.sleep(forTimeInterval: 0.1) } ])
         let metrics = runMeasure(with: cfg)
         
         XCTAssertTrue(metrics.timeMean.isApproximateEqual(to: 0.1, epsilon: 0.01))
@@ -22,7 +22,7 @@ final class LatencyMeasureTests: XCTestCase {
     }
     
     func testLatencyMultipleRun2() {
-        let cfg = SFTConfig(iterations: 1, trials: [ { Thread.sleep(forTimeInterval: 0.1) },
+        let cfg = SPTConfig(iterations: 1, trials: [ { Thread.sleep(forTimeInterval: 0.1) },
                                                      { Thread.sleep(forTimeInterval: 0.1) },
                                                      { Thread.sleep(forTimeInterval: 0.1) } ])
         let metrics = runMeasure(with: cfg)
@@ -33,11 +33,11 @@ final class LatencyMeasureTests: XCTestCase {
     }
     
     func testScoreTimeRelation() {
-        let m1 = runMeasure(with: SFTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.1) } ]))
-        let m2 = runMeasure(with: SFTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.05) } ]))
-        let m3 = runMeasure(with: SFTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.01) } ]))
-        let m4 = runMeasure(with: SFTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.001) }]))
-        let m5 = runMeasure(with: SFTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.0001) }]))
+        let m1 = runMeasure(with: SPTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.1) } ]))
+        let m2 = runMeasure(with: SPTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.05) } ]))
+        let m3 = runMeasure(with: SPTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.01) } ]))
+        let m4 = runMeasure(with: SPTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.001) }]))
+        let m5 = runMeasure(with: SPTConfig(iterations: 5, trials: [ { Thread.sleep(forTimeInterval: 0.0001) }]))
         
         XCTAssertGreaterThan(m1.timeScores, m2.timeScores)
         XCTAssertGreaterThan(m2.timeScores, m3.timeScores)

@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: -
-public struct SFTMetrics: Equatable {
+public struct SPTMetrics: Equatable {
     
     public struct Time: Equatable {
         public let mean: Double
@@ -56,15 +56,8 @@ public struct SFTMetrics: Equatable {
     }
 }
 
-extension SFTMetrics: CustomStringConvertible {
+extension SPTMetrics: CustomStringConvertible {
     public var description: String {
         return "Time scores: \(timeScores), mean: \(timeMean), sd: \(timeSd). Memory usage: \(memoryUsage != nil ? String(memory) : "not defined")"
     }
-}
-
-// MARK :-
-func calcMemoryUsage(before: UInt64?, after: UInt64?) -> UInt64? {
-    guard let before = before, let after = after else { return nil }
-    let r = after.subtractingReportingOverflow(before)
-    return r.overflow ? 0 : r.partialValue
 }

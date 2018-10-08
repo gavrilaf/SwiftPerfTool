@@ -18,3 +18,10 @@ public func reportMemory() throws -> UInt64 {
         throw SPTError.memoryReport(String(validatingUTF8: mach_error_string(kerr)) ?? "unknown error")
     }
 }
+
+// MARK :-
+func calcMemoryUsage(before: UInt64?, after: UInt64?) -> UInt64? {
+    guard let before = before, let after = after else { return nil }
+    let r = after.subtractingReportingOverflow(before)
+    return r.overflow ? 0 : r.partialValue
+}

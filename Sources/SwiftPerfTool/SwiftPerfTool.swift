@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: -
-public struct SFTConfig {
+public struct SPTConfig {
     public let iterations: Int
     public let trials: [() -> Void]
     
@@ -13,7 +13,7 @@ public struct SFTConfig {
 
 
 // MARK: -
-public func runMeasure(with config: SFTConfig) -> SFTMetrics {
+public func runMeasure(with config: SPTConfig) -> SPTMetrics {
     var latencies = Array<UInt64>(repeating: 0, count: config.iterations * config.trials.count)
 
     let memoryBefore = try? reportMemory()
@@ -29,5 +29,5 @@ public func runMeasure(with config: SFTConfig) -> SFTMetrics {
     
     let memoryAfter = try? reportMemory()
     
-    return SFTMetrics(latencies: latencies, memoryUsage: calcMemoryUsage(before: memoryBefore, after: memoryAfter))
+    return SPTMetrics(latencies: latencies, memoryUsage: calcMemoryUsage(before: memoryBefore, after: memoryAfter))
 }
