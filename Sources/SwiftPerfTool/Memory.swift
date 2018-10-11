@@ -1,6 +1,7 @@
 import Foundation
 
 public func reportMemory() throws -> UInt64 {
+#if os(OSX)
     var info = mach_task_basic_info()
     var count = mach_msg_type_number_t(MemoryLayout.size(ofValue: info)) / 4
     
@@ -17,6 +18,9 @@ public func reportMemory() throws -> UInt64 {
     else {
         throw SPTError.memoryReport(String(validatingUTF8: mach_error_string(kerr)) ?? "unknown error")
     }
+#else
+    return 0
+#endif
 }
 
 // MARK :-
